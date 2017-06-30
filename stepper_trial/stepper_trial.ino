@@ -3,9 +3,10 @@
 #include <MultiStepper.h>
 
  
-AccelStepper stepper1(AccelStepper::DRIVER, 11, 10); 
-AccelStepper stepper2(AccelStepper::DRIVER, 9, 8); // works great
-AccelStepper stepper3(AccelStepper::DRIVER, 6, 7);
+AccelStepper stepper1(AccelStepper::DRIVER, 18, 19); 
+AccelStepper stepper2(AccelStepper::DRIVER, 16, 17); 
+AccelStepper stepper3(AccelStepper::DRIVER, 14, 15);
+
 
 long pos = 3600;
 void setup() {
@@ -13,7 +14,7 @@ void setup() {
   stepper2.setMaxSpeed(7000);
   stepper3.setMaxSpeed(7000);
 }
-
+//this is a comment
 void loop() {
   // put your main code here, to run repeatedly:
 

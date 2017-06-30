@@ -15,8 +15,11 @@ int s=0;
 int sec=0;
 int hrs=0;
 int minutes=0;
-int initialHours = 02;//variable to initiate hours
-int initialMins = 0;//variable to initiate minutes
+//int days=0;
+//int months=1;
+//int years=2017;
+int initialHours = 0;//variable to initiate hours
+int initialMins = 00;//variable to initiate minutes
 int initialSecs = 00;//variable to initiate seconds
 
 //this method is for seconds
@@ -28,7 +31,8 @@ int seconds()
     s = s+(millis()/1000);
     return s;
 }
-//this method is for hours
+
+
 int hours()
 {
     hrs = seconds();
@@ -60,8 +64,10 @@ void loop()
 void printDigits(byte digits)
 {
     if(digits < 10)
+    {
         lcd.print('0');
-    lcd.print(digits);
+    }    
+     lcd.print(digits);
 }
 
 char sep()
