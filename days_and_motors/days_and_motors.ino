@@ -41,7 +41,9 @@ void loop() {
 
 
  steps=stepper3.currentPosition();
+ 
  printDate();
+
   // need to fix makes day motor not run too well
  
 }
@@ -51,7 +53,7 @@ void loop() {
 //feb == 28 (29 leap year)
 int days()
 {
-
+ mont = 1;
  dy = steps/320;
  
   
@@ -65,6 +67,7 @@ int days()
     }
     else if (mont == 4 || mont == 6 || mont == 9 || mont == 11 && dy==30)
     {
+      months();
       dy=1;
       
     }
@@ -73,11 +76,15 @@ int days()
        dy++;
     }
   }
-  else// (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 || mont == 12 && dy==31)
+  else// (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 && dy==31)
   {
+     months();
      dy=1;
  
   }
+ 
+
+  
   
 return dy;
 }
@@ -86,24 +93,28 @@ void months()
 {
   mont++;
   dy=1;
-  days();
-
   years();
+}
+
+int getMonth()
+{
+  return mont;
+}
+
+int getYear()
+{
+  return yr;
 }
 
 void years()
 {
-  if (mont > 12)
-  {
-    mont=1;
-    yr++;
-  }
-  else
-  {
-    yr=yr;
-  }
-  
-  
+  yr++;
+  mont=1;
+}
+
+int getDay()
+{
+  return dy;
 }
 
 void printDate()
@@ -111,9 +122,9 @@ void printDate()
   lcd.setCursor(0,0);
   lcd.print(days());
   lcd.print(" / ");
-  lcd.print(mont);
+  lcd.print(getMonth());
   lcd.print(" / ");
-  lcd.print(yr);
+  lcd.print(getYear());
 
 }
 
