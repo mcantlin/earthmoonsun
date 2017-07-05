@@ -3,10 +3,10 @@
 #include <AccelStepper.h>
 #include <MultiStepper.h>
 
-int dy=0;
-int mont=1;
-int yr=2017;
-int steps=0;
+int dy=1;
+int mont =1;
+long yr = 2017;
+long steps;
 
 AccelStepper stepper1(AccelStepper::DRIVER, 18, 19); 
 AccelStepper stepper2(AccelStepper::DRIVER, 16, 17); 
@@ -28,14 +28,16 @@ void setup() {
 void loop() {
   stepper1.setSpeed(130);//0.44rps ==> ~2.27 second moon cycle
   stepper2.setSpeed(110);//0.032rps ==> ~31 second year
-  stepper3.setSpeed(150);//11.8rps ==> ~0.084 second day -->6000
-  
+  stepper3.setSpeed(500);//11.8rps ==> ~0.084 second day -->6000
+  // needs to fix
   stepper1.runSpeed();
   stepper2.runSpeed();
   stepper3.runSpeed();
-
+  
   steps=stepper3.currentPosition();
   printDate();
+  // need to fix makes day motor not run too well
+ 
 }
 
 //jan, march, may, july, august,october, december == 31
@@ -43,53 +45,70 @@ void loop() {
 //feb == 28 (29 leap year)
 int days()
 {
-  dy = steps%20;
 
-if (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 || mont == 12 && dy==31)
-{
-     dy=0;
-     mont++; 
-}
-
-else //(mont ==2 || mont == 4 || mont == 6 || mont == 9 || mont == 11 && dy>=28);
-{
-    if (mont==2 && dy==28)
+ dy = steps/320;
+ mont = months();
+  
+  if (dy < 31)
+  {
+    if (mont == 2 && dy == 28)
     {
-      dy=0;
-      mont++;
+      dy=1;
+     // months(mont);
     }
     else if (mont == 4 || mont == 6 || mont == 9 || mont == 11 && dy==30)
     {
-      dy=0;
-      mont++;
+      dy=1;
+      //months(mont);
     }
     else
     {
-      dy++;
+       dy++;
     }
-}
-
+  }
+  else// (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 || mont == 12 && dy==31)
+  {
+     dy=1;
+  //  months(mont); 
+  }
   
+return dy;
 }
 
 int months()
+{
+  mont++;
+  dy=1;
+  days();
+ // years(mont);
+  return mont;
+}
+
+long years()
 {
   if (mont > 12)
   {
     mont=0;
     yr++;
   }
+  else
+  {
+    yr=yr;
+  }
+  
+  return yr;
+  
 }
 
 void printDate()
 {
   lcd.setCursor(0,0);
-  lcd.print(dy);
+  lcd.print(days());
   lcd.print(" / ");
   lcd.print(mont);
   lcd.print(" / ");
   lcd.print(yr);
-  
+
 }
 
 
