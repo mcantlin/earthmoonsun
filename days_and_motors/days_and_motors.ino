@@ -53,19 +53,20 @@ int days()
 {
 
  dy = steps/320;
- mont=1;
+ 
   
   if (dy < 31)
   {
     if (mont == 2 && dy == 28)
     {
       dy=1;
-     // months(mont);
+      months();
+     
     }
     else if (mont == 4 || mont == 6 || mont == 9 || mont == 11 && dy==30)
     {
       dy=1;
-      //months(mont);
+      
     }
     else
     {
@@ -75,26 +76,26 @@ int days()
   else// (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 || mont == 12 && dy==31)
   {
      dy=1;
-  //  months(mont); 
+ 
   }
   
 return dy;
 }
 
-int months()
+void months()
 {
   mont++;
   dy=1;
   days();
- // years(mont);
-  return mont;
+
+  years();
 }
 
-long years()
+void years()
 {
   if (mont > 12)
   {
-    mont=0;
+    mont=1;
     yr++;
   }
   else
@@ -102,7 +103,6 @@ long years()
     yr=yr;
   }
   
-  return yr;
   
 }
 
