@@ -22,20 +22,26 @@ void setup() {
   stepper1.setMaxSpeed(5000);
   stepper2.setMaxSpeed(7000);
   stepper3.setMaxSpeed(7000);
+  
+  stepper1.setSpeed(130);//0.44rps ==> ~2.27 second moon cycle
+  stepper2.setSpeed(110);//0.032rps ==> ~31 second year
+  stepper3.setSpeed(500);//11.8rps ==> ~0.084 second day -->6000
+
+
+  
  
 }
 
 void loop() {
-  stepper1.setSpeed(130);//0.44rps ==> ~2.27 second moon cycle
-  stepper2.setSpeed(110);//0.032rps ==> ~31 second year
-  stepper3.setSpeed(500);//11.8rps ==> ~0.084 second day -->6000
-  // needs to fix
+  
+
   stepper1.runSpeed();
   stepper2.runSpeed();
   stepper3.runSpeed();
-  
-  steps=stepper3.currentPosition();
-  printDate();
+
+
+ steps=stepper3.currentPosition();
+ printDate();
   // need to fix makes day motor not run too well
  
 }
@@ -47,7 +53,7 @@ int days()
 {
 
  dy = steps/320;
- mont = months();
+ mont=1;
   
   if (dy < 31)
   {
