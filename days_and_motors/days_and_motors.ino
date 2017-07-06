@@ -3,22 +3,25 @@
 #include <AccelStepper.h>
 #include <MultiStepper.h>
 
-int dy=1;
-int mont =1;
-long yr = 2017;
-long steps;
 
 AccelStepper stepper1(AccelStepper::DRIVER, 18, 19); 
 AccelStepper stepper2(AccelStepper::DRIVER, 16, 17); 
 AccelStepper stepper3(AccelStepper::DRIVER, 14, 15);
 
 
+
+//int sDay=1;
+//int count=1;
+//long yr = 2017;
+long steps;
+
 LiquidCrystal lcd(8,9,4,5,6,7);
 
 
 void setup() {
   lcd.begin(16,2);  
-  
+
+
   stepper1.setMaxSpeed(5000);
   stepper2.setMaxSpeed(7000);
   stepper3.setMaxSpeed(7000);
@@ -33,100 +36,68 @@ void setup() {
 }
 
 void loop() {
-  
 
   stepper1.runSpeed();
   stepper2.runSpeed();
   stepper3.runSpeed();
 
 
- steps=stepper3.currentPosition();
  
- printDate();
+  date(); // when this is enabled it makes it so the motors do not run at the same time
+          // possibly could use interupts()??
 
-  // need to fix makes day motor not run too well
  
 }
 
 //jan, march, may, july, august,october, december == 31
 //april, june, september, november == 30
 //feb == 28 (29 leap year)
-int days()
+void date()
 {
- mont = 1;
- dy = steps/320;
- 
-  
-  if (dy < 31)
-  {
-    if (mont == 2 && dy == 28)
+int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int count=1;
+long yr = 2017;
+
+
+
+while (1)
+{
+   int sDay=1;
+    for (; sDay<=days[count-1]; sDay++)
     {
-      dy=1;
-      months();
-     
+        lcd.setCursor(0,0);
+        if (sDay < 10) lcd.print('0');
+        lcd.print(sDay);
+        lcd.print(" / ");
+        if (count < 10) lcd.print('0');
+        lcd.print(count);
+        lcd.print(" / ");
+        lcd.print(yr);
+        delay(1000); // for 11.8 rps needs to break for .085 seconds
     }
-    else if (mont == 4 || mont == 6 || mont == 9 || mont == 11 && dy==30)
+    count++;
+    if (count > 12)
     {
-      months();
-      dy=1;
-      
+      yr++;
+      count=1;
     }
-    else
-    {
-       dy++;
-    }
-  }
-  else// (mont == 1 ||mont == 3 || mont == 5 || mont == 7 || mont == 8 || mont == 10 && dy==31)
-  {
-     months();
-     dy=1;
- 
-  }
- 
-
-  
-  
-return dy;
 }
 
-void months()
-{
-  mont++;
-  dy=1;
-  years();
+
+
 }
 
-int getMonth()
-{
-  return mont;
-}
 
-int getYear()
-{
-  return yr;
-}
-
-void years()
-{
-  yr++;
-  mont=1;
-}
-
-int getDay()
-{
-  return dy;
-}
-
-void printDate()
+/*void printDate()
 {
   lcd.setCursor(0,0);
-  lcd.print(days());
+  lcd.print(sDay);
   lcd.print(" / ");
-  lcd.print(getMonth());
+  lcd.print(count);
   lcd.print(" / ");
-  lcd.print(getYear());
+  lcd.print(yr);
 
-}
+}*/
 
 
 /*
