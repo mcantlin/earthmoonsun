@@ -14,20 +14,22 @@ int sDay=1;
 int count=1;
 long yr = 2017;
 long steps;
+String calendar="";
+
 
 LiquidCrystal lcd(8,9,4,5,6,7);
 
 
 void setup() {
   lcd.begin(16,2);  
-  
+  Serial.begin(9600);
 
   stepper1.setMaxSpeed(5000);
   stepper2.setMaxSpeed(7000);
   stepper3.setMaxSpeed(7000);
   
-  stepper1.setSpeed(65);// ==> ~5 second moon cycle
-  stepper2.setSpeed(55);// ==> ~62 second year
+  stepper1.setSpeed(70);// ==> ~5 second moon cycle ==> needs to be slightly faster
+  stepper2.setSpeed(60);// ==> ~62 second year ==> needs to be slightly faster
   stepper3.setSpeed(3000);// ==> ~0.168 second day
 
 
@@ -41,9 +43,10 @@ void loop() {
   stepper2.runSpeed();
   stepper3.runSpeed();
 
-
+  
   if (stepper3.currentPosition()%300==0) 
   { 
+
      date();
   }
   
@@ -61,14 +64,24 @@ void date()
    
      if (sDay<=days[count-1])
       {
-        lcd.setCursor(0,0);
-        if (sDay < 10) lcd.print('0');
-        lcd.print(sDay);
+        String zero="";
+        String zero1="";
+        String spacer = " / ";
+        if (sDay < 10) zero = "0";
+        if (count < 10) zero1 = "0";
+        calendar = (zero +sDay + spacer + zero1 + count + spacer + yr);
+
+        
+        
+       /* lcd.print(sDay);
         lcd.print(" / ");
         if (count < 10) lcd.print('0');
         lcd.print(count);
         lcd.print(" / ");
-        lcd.print(yr);
+        lcd.print(yr);*/
+
+        lcd.setCursor(0,0);
+        lcd.print(calendar);
         sDay++;
         // for 11.8 rps needs to break for .085 seconds
       }
