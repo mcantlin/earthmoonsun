@@ -9,10 +9,10 @@ AccelStepper stepper2(AccelStepper::DRIVER, 16, 17);
 AccelStepper stepper3(AccelStepper::DRIVER, 14, 15);
 
 
-
-//int sDay=1;
-//int count=1;
-//long yr = 2017;
+int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int sDay=1;
+int count=1;
+long yr = 2017;
 long steps;
 
 LiquidCrystal lcd(8,9,4,5,6,7);
@@ -20,15 +20,15 @@ LiquidCrystal lcd(8,9,4,5,6,7);
 
 void setup() {
   lcd.begin(16,2);  
-
+  
 
   stepper1.setMaxSpeed(5000);
   stepper2.setMaxSpeed(7000);
   stepper3.setMaxSpeed(7000);
   
-  stepper1.setSpeed(130);//0.44rps ==> ~2.27 second moon cycle
-  stepper2.setSpeed(110);//0.032rps ==> ~31 second year
-  stepper3.setSpeed(500);//11.8rps ==> ~0.084 second day -->6000
+  stepper1.setSpeed(65);// ==> ~5 second moon cycle
+  stepper2.setSpeed(55);// ==> ~62 second year
+  stepper3.setSpeed(3000);// ==> ~0.168 second day
 
 
   
@@ -42,10 +42,13 @@ void loop() {
   stepper3.runSpeed();
 
 
- 
-  date(); // when this is enabled it makes it so the motors do not run at the same time
-          // possibly could use interupts()??
+  if (stepper3.currentPosition()%300==0) 
+  { 
+     date();
+  }
+  
 
+  
  
 }
 
@@ -54,17 +57,10 @@ void loop() {
 //feb == 28 (29 leap year)
 void date()
 {
-int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-int count=1;
-long yr = 2017;
 
-
-
-while (1)
-{
-   int sDay=1;
-    for (; sDay<=days[count-1]; sDay++)
-    {
+   
+     if (sDay<=days[count-1])
+      {
         lcd.setCursor(0,0);
         if (sDay < 10) lcd.print('0');
         lcd.print(sDay);
@@ -73,19 +69,23 @@ while (1)
         lcd.print(count);
         lcd.print(" / ");
         lcd.print(yr);
-        delay(1000); // for 11.8 rps needs to break for .085 seconds
-    }
-    count++;
-    if (count > 12)
-    {
-      yr++;
-      count=1;
-    }
+        sDay++;
+        // for 11.8 rps needs to break for .085 seconds
+      }
+      if (sDay > days[count-1])
+      {
+        count++;
+        sDay=1;
+      }
+      if (count > 12)
+      {
+        yr++;
+        count=1;
+      }
 }
 
 
 
-}
 
 
 /*void printDate()
